@@ -25,6 +25,7 @@ export const Input = ({ value, onChange, path }) => {
         value={v}
         onChange={onChange}
       />
+      <span children={','} />
     </>
   );
 };
