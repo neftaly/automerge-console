@@ -2,10 +2,32 @@ import { useState } from "react";
 import { Actions, ExpandButton } from "./Buttons";
 import { isObject, isString } from "./helpers";
 
+/*
+This tree editor presents a text view of pretty-printed JSON object,
+which can be edited in place with instant feedback.
+
+A "v2" could use a contenteditable and parse the JSON on the fly,
+using context about the user actions to figure out what is being done on a 
+per-node basis, and autocorrect/mark missing quotes/etc locally - as opposed to 
+parsing the whole object at once.
+
+This would present a developer-freindly interface similar to the experience of 
+editing JSON in a text editor. This would let us get rid of the add/delete 
+buttons. The import/export buttons could operate on the node closest to the 
+cursor, which would mean we don't need to superimpose them over the content, 
+and could use keyboard shortcuts. It'd also be nice to have keyboard shortcuts 
+for navigating between nodes.
+
+We would probably want to batch changes, so that we don't accidentally persist 
+intermeditate states. A "commit changes" button would work for now.
+*/
+
 const stringColor = "DarkViolet"; // Make quoted strings more visible
 
 export const Input = ({ value, onChange, path }) => {
   const v = JSON.stringify(value);
+  // When editing a node, if it's not a primitive/number (isString),
+  // we'll automatically wrap it in quotes
   return (
     <>
       <span children=": " />
@@ -25,7 +47,7 @@ export const Input = ({ value, onChange, path }) => {
         value={v}
         onChange={onChange}
       />
-      <span children={','} />
+      <span children={","} />
     </>
   );
 };
@@ -42,7 +64,6 @@ export const Node = ({ name, value, path }) => {
       style={{
         marginLeft: hover ? "calc(2ch - 1px)" : "2ch",
         borderLeft: hover && "1px dotted black",
-        // backgroundColor: hover && "rgba(1,1,1,0.1)",
       }}
       onMouseOver={(e) => {
         setHover(true);

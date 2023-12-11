@@ -21,7 +21,6 @@ const Button = (props) => {
   );
 };
 
-// Not wild about the placement of these buttons, but unsure where else to put them
 export const Actions = ({ path, isBranch }) => (
   <div
     style={{
