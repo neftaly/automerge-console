@@ -62,8 +62,8 @@ export const Node = ({ name, value, path }) => {
   return (
     <div
       style={{
-        marginLeft: hover ? "calc(2ch - 1px)" : "2ch",
-        borderLeft: hover && "1px dotted black",
+        marginLeft: "calc(2ch - 1px)",
+        borderLeft: hover ? "1px dotted black" : "1px solid transparent",
       }}
       onMouseOver={(e) => {
         setHover(true);

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./buttons.css";
 
 const Button = (props) => {
   const [hover, setHover] = useState(false);
@@ -6,13 +7,14 @@ const Button = (props) => {
     <button
       onMouseOver={(e) => setHover(true)}
       onMouseOut={(e) => setHover(false)}
+      className="firefoxSelectionBugFix"
       style={{
         userSelect: "none",
         opacity: hover ? 1 : 0.5,
-        backgroundColor: "transparent",
+        background: "transparent",
         fontFamily: "inherit",
         fontSize: "inherit",
-        border: 0,
+        border: "none",
         padding: 0,
         margin: "0 0 0 1ch",
       }}

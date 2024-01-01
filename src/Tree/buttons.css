@@ -1,0 +1,4 @@
+/* Bugfix: Firefox shows user-select:none buttons inside selection as selected, even though they're not */
+button.firefoxSelectionBugFix::-moz-selection {
+  background: inherit;
+}
