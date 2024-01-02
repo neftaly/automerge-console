@@ -24,7 +24,7 @@ intermeditate states. A "commit changes" button would work for now.
 
 const stringColor = "DarkViolet"; // Make quoted strings more visible
 
-export const Input = ({ value, onChange, path }) => {
+export const Input = ({ value, onChange, path, showTrailingComma }) => {
   const v = JSON.stringify(value);
   // When editing a node, if it's not a primitive/number (isString),
   // we'll automatically wrap it in quotes
@@ -47,18 +47,19 @@ export const Input = ({ value, onChange, path }) => {
         value={v}
         onChange={onChange}
       />
-      <span children={","} />
+      {showTrailingComma && <span children={","} />}
     </>
   );
 };
 
-export const Node = ({ name, value, path }) => {
+export const Node = ({ name, value, path, isLast }) => {
   const [expanded, setExpanded] = useState(true);
   const expandable = isObject(value);
   const [openBracket, closeBracket] = Array.isArray(value)
     ? ["[", "]"]
     : ["{", "}"];
   const [hover, setHover] = useState(false);
+  const showTrailingComma = !isLast;
   return (
     <div
       style={{
@@ -85,19 +86,33 @@ export const Node = ({ name, value, path }) => {
         (expandable ? (
           <Branch value={value} path={path} />
         ) : (
-          <Input value={value} path={path} onChange={console.info} />
+          <Input
+            value={value}
+            path={path}
+            showTrailingComma={showTrailingComma}
+            onChange={console.info}
+          />
         ))}
       {!expandable && hover && <Actions path={path} />}
       {expandable && !expanded && "..."}
-      {expandable && `${closeBracket},`}
+      {expandable && `${closeBracket}${showTrailingComma ? "," : ""}`}
     </div>
   );
 };
 
-export const Branch = ({ path, value }) =>
-  Object.entries(value).map(([key, v]) => (
-    <Node key={key} name={key} value={v} path={[...path, key]} />
+export const Branch = ({ path, value }) => {
+  const entries = Object.entries(value);
+  const lastKey = entries.length - 1;
+  return entries.map(([name, v], key) => (
+    <Node
+      key={key}
+      name={name}
+      value={v}
+      path={[...path, name]}
+      isLast={key === lastKey}
+    />
   ));
+};
 
 export const Tree = ({ path, data }) => (
   <div style={{ fontFamily: "monospace", fontSize: "14px" }}>
