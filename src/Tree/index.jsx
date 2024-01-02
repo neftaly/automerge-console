@@ -52,6 +52,18 @@ export const Input = ({ value, onChange, path, showTrailingComma }) => {
   );
 };
 
+export const HiddenText = ({ value }) => {
+  return (
+    <>
+      <div
+        style={{ display: "inline-block", width: 0, height: 0, overflow: "hidden" }}
+        children={JSON.stringify(value)}
+      />
+      <span style={{ userSelect: "none" }} children="..." />
+    </>
+  );
+};
+
 export const Node = ({ name, value, path, isLast }) => {
   const [expanded, setExpanded] = useState(true);
   const expandable = isObject(value);
@@ -94,7 +106,7 @@ export const Node = ({ name, value, path, isLast }) => {
           />
         ))}
       {!expandable && hover && <Actions path={path} />}
-      {expandable && !expanded && "..."}
+      {expandable && !expanded && <HiddenText value={value} />}
       {expandable && `${closeBracket}${showTrailingComma ? "," : ""}`}
     </div>
   );
